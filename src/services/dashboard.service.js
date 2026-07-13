@@ -2,7 +2,7 @@ const dashboardRepository = require('../repositories/dashboard.repository');
 
 class DashboardService {
   async getDashboardSummary() {
-    return {};
+    return await dashboardRepository.getSummaryStats();
   }
 }
 

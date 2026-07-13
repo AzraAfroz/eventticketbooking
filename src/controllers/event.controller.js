@@ -14,7 +14,7 @@ class EventController {
   });
 
   createEvent = asyncHandler(async (req, res) => {
-    const event = await eventService.createEvent(req.body);
+    const event = await eventService.createEvent(req.body, req.user);
     return successResponse(res, 201, 'Event created successfully', event);
   });
 }

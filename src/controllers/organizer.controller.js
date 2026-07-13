@@ -15,7 +15,6 @@ class OrganizerController {
 
   createOrganizer = asyncHandler(async (req, res) => {
     const organizer = await organizerService.createOrganizer(req.body);
-    console.log(organizer)
     return successResponse(res, 201, 'Organizer profile created successfully', organizer);
   });
 

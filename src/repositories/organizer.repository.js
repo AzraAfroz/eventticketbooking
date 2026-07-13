@@ -1,4 +1,5 @@
-const { Organizer, User } = require('../models');
+const { Organizer, User, Role } = require('../models');
+const { ROLES } = require('../config/constants');
 
 class OrganizerRepository {
   async findAll() {
@@ -11,6 +12,10 @@ class OrganizerRepository {
     return await Organizer.findByPk(id, {
       include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }]
     });
+  }
+
+  async findOrganizerRole() {
+    return await Role.findOne({ where: { name: ROLES.ORGANIZER } });
   }
 
   async create(organizerData) {
@@ -29,6 +34,15 @@ class OrganizerRepository {
     const user = await User.findByPk(userId);
     if (user) {
       user.isActive = isActive;
+      await user.save();
+    }
+    return user;
+  }
+
+  async updateUserRole(userId, roleId) {
+    const user = await User.findByPk(userId);
+    if (user) {
+      user.roleId = roleId;
       await user.save();
     }
     return user;

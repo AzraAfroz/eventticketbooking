@@ -1,6 +1,7 @@
 const eventRepository = require('../repositories/event.repository');
 const ApiError = require('../utils/ApiError');
-const { Event, SeatCategory, Seat, sequelize } = require('../models');
+const { Event, Organizer, SeatCategory, Seat, sequelize } = require('../models');
+const { ROLES } = require('../config/constants');
 
 class EventService {
   async getAllEvents() {
@@ -15,12 +16,12 @@ class EventService {
     return event;
   }
 
-  async createEvent(eventData) {
+  async createEvent(eventData, currentUser) {
     const { title, description, date, eventDate, venueId, organizerId, categories } = eventData;
     
     // Support both date and eventDate field names from various client requests
     const actualEventDate = eventDate || date;
-    const actualOrganizerId = organizerId || 1;
+    const actualOrganizerId = await this.resolveOrganizerId(currentUser, organizerId);
     const actualCategories = categories || [{ name: 'General Admission', price: 50.00, capacity: 50 }];
 
     const transaction = await sequelize.transaction();
@@ -64,6 +65,22 @@ class EventService {
       await transaction.rollback();
       throw error;
     }
+  }
+
+  async resolveOrganizerId(currentUser, organizerId) {
+    if (currentUser?.role === ROLES.ORGANIZER) {
+      const organizer = await Organizer.findOne({ where: { userId: currentUser.id } });
+      if (!organizer) {
+        throw ApiError.forbidden('Organizer profile not found for this user');
+      }
+      return organizer.id;
+    }
+
+    if (!organizerId) {
+      throw ApiError.badRequest('organizerId is required');
+    }
+
+    return organizerId;
   }
 }
 

@@ -1,12 +1,22 @@
-const { Ticket } = require('../models');
+const { Ticket, Booking, Seat, Event } = require('../models');
 
 class TicketRepository {
   async findByTicketNumber(ticketNumber) {
-    return null;
+    return await Ticket.findOne({
+      where: { ticketNumber },
+      include: [
+        {
+          model: Booking,
+          as: 'booking',
+          include: [{ model: Event, as: 'event' }]
+        },
+        { model: Seat, as: 'seat' }
+      ]
+    });
   }
 
   async createTickets(ticketsData) {
-    return [];
+    return await Ticket.bulkCreate(ticketsData);
   }
 }
 

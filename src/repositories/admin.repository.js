@@ -1,12 +1,24 @@
-const { User } = require('../models');
+const { User, Role } = require('../models');
+const { Op } = require('sequelize');
 
 class AdminRepository {
   async findAll() {
-    return [];
+    return await User.findAll({
+      include: [{
+        model: Role,
+        as: 'role',
+        where: {
+          name: {
+            [Op.in]: ['admin', 'super_admin']
+          }
+        }
+      }],
+      attributes: { exclude: ['password'] }
+    });
   }
 
   async createAdmin(adminData) {
-    return null;
+    return await User.create(adminData);
   }
 }
 

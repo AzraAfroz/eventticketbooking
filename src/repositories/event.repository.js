@@ -1,16 +1,27 @@
-const { Event } = require('../models');
+const { Event, Venue, Organizer, SeatCategory } = require('../models');
 
 class EventRepository {
   async findAll() {
-    return [];
+    return await Event.findAll({
+      include: [
+        { model: Venue, as: 'venue' },
+        { model: Organizer, as: 'organizer' }
+      ]
+    });
   }
 
   async findById(id) {
-    return null;
+    return await Event.findByPk(id, {
+      include: [
+        { model: Venue, as: 'venue' },
+        { model: Organizer, as: 'organizer' },
+        { model: SeatCategory, as: 'seatCategories' }
+      ]
+    });
   }
 
   async create(eventData) {
-    return null;
+    return await Event.create(eventData);
   }
 }
 

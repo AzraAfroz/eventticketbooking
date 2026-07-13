@@ -1,16 +1,27 @@
-const { Booking } = require('../models');
+const { Booking, Seat, Ticket, Event } = require('../models');
 
 class BookingRepository {
   async create(bookingData) {
-    return null;
+    return await Booking.create(bookingData);
   }
 
   async findById(id) {
-    return null;
+    return await Booking.findByPk(id, {
+      include: [
+        { model: Event, as: 'event' },
+        { model: Seat, as: 'seats' },
+        { model: Ticket, as: 'tickets' }
+      ]
+    });
   }
 
   async updateStatus(id, status) {
-    return null;
+    const booking = await Booking.findByPk(id);
+    if (booking) {
+      booking.status = status;
+      await booking.save();
+    }
+    return booking;
   }
 }
 

@@ -2,15 +2,15 @@ const { Venue } = require('../models');
 
 class VenueRepository {
   async findAll() {
-    return [];
+    return await Venue.findAll();
   }
 
   async findById(id) {
-    return null;
+    return await Venue.findByPk(id);
   }
 
   async create(venueData) {
-    return null;
+    return await Venue.create(venueData);
   }
 }
 

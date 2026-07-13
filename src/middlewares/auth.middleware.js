@@ -9,8 +9,11 @@ const asyncHandler = require('./asyncHandler');
 const authenticate = asyncHandler(async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+  if (req.headers.authorization) {
+    const match = req.headers.authorization.match(/^bearer\s+(.+)$/i);
+    if (match) {
+      token = match[1];
+    }
   }
 
   if (!token) {

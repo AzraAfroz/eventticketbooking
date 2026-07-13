@@ -1,14 +1,28 @@
-const { User } = require('../models');
+const { User, Role, Permission } = require('../models');
 
 class AuthRepository {
   async findByEmail(email) {
-    // Database query placeholder
-    return null;
+    return await User.findOne({
+      where: { email },
+      include: [
+        {
+          model: Role,
+          as: 'role',
+          include: [
+            {
+              model: Permission,
+              as: 'permissions',
+              attributes: ['name'],
+              through: { attributes: [] }
+            }
+          ]
+        }
+      ]
+    });
   }
 
   async createUser(userData) {
-    // Database insert placeholder
-    return null;
+    return await User.create(userData);
   }
 }
 

@@ -1,0 +1,82 @@
+const { ROLES } = require('./constants');
+
+const PERMISSIONS = {
+  // User & RBAC Management
+  MANAGE_ROLES: 'manage_roles',
+  MANAGE_PERMISSIONS: 'manage_permissions',
+  MANAGE_USERS: 'manage_users',
+
+  // Admin & Organizer Management
+  MANAGE_ADMINS: 'manage_admins',
+  MANAGE_ORGANIZERS: 'manage_organizers',
+
+  // Venue Management
+  MANAGE_VENUES: 'manage_venues',
+  VIEW_VENUES: 'view_venues',
+
+  // Event Management
+  MANAGE_EVENTS: 'manage_events',
+  VIEW_EVENTS: 'view_events',
+
+  // Seat Management
+  MANAGE_SEATS: 'manage_seats',
+  VIEW_SEATS: 'view_seats',
+
+  // Booking & Ticket Management
+  MANAGE_BOOKINGS: 'manage_bookings',
+  CREATE_BOOKINGS: 'create_bookings',
+  VIEW_BOOKINGS: 'view_bookings',
+  MANAGE_TICKETS: 'manage_tickets',
+  VIEW_TICKETS: 'view_tickets',
+
+  // Dashboards & Reports
+  VIEW_DASHBOARD: 'view_dashboard',
+  VIEW_REPORTS: 'view_reports'
+};
+
+// Default mapping of permissions to roles
+const ROLE_PERMISSIONS_MAPPING = {
+  [ROLES.SUPER_ADMIN]: Object.values(PERMISSIONS),
+  
+  [ROLES.ADMIN]: [
+    PERMISSIONS.MANAGE_ORGANIZERS,
+    PERMISSIONS.MANAGE_VENUES,
+    PERMISSIONS.VIEW_VENUES,
+    PERMISSIONS.MANAGE_EVENTS,
+    PERMISSIONS.VIEW_EVENTS,
+    PERMISSIONS.MANAGE_SEATS,
+    PERMISSIONS.VIEW_SEATS,
+    PERMISSIONS.MANAGE_BOOKINGS,
+    PERMISSIONS.VIEW_BOOKINGS,
+    PERMISSIONS.MANAGE_TICKETS,
+    PERMISSIONS.VIEW_TICKETS,
+    PERMISSIONS.VIEW_DASHBOARD,
+    PERMISSIONS.VIEW_REPORTS
+  ],
+
+  [ROLES.ORGANIZER]: [
+    PERMISSIONS.VIEW_VENUES,
+    PERMISSIONS.MANAGE_EVENTS,
+    PERMISSIONS.VIEW_EVENTS,
+    PERMISSIONS.MANAGE_SEATS,
+    PERMISSIONS.VIEW_SEATS,
+    PERMISSIONS.VIEW_BOOKINGS,
+    PERMISSIONS.MANAGE_TICKETS,
+    PERMISSIONS.VIEW_TICKETS,
+    PERMISSIONS.VIEW_DASHBOARD,
+    PERMISSIONS.VIEW_REPORTS
+  ],
+
+  [ROLES.CUSTOMER]: [
+    PERMISSIONS.VIEW_EVENTS,
+    PERMISSIONS.VIEW_SEATS,
+    PERMISSIONS.CREATE_BOOKINGS,
+    PERMISSIONS.VIEW_BOOKINGS,
+    PERMISSIONS.VIEW_TICKETS
+  ]
+};
+
+module.exports = {
+  PERMISSIONS,
+  ROLE_PERMISSIONS_MAPPING
+};

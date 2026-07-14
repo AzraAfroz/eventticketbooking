@@ -168,7 +168,7 @@ Reset account password using the generated token.
 
 #### `POST /organizers`
 Onboard a new organizer profile.
-* **Authentication**: Any Authenticated User (requires `Authorization: Bearer <JWT>`)
+* **Authentication**: Required (`manage_organizers`)
 * **Request Body**:
   ```json
   {
@@ -803,12 +803,12 @@ First, register a customer and organizer, then log in as Super Admin (`admin@exa
 
 ---
 
-### Step 2: Organizer Onboarding & Approval
+### Step 2: Organizer Onboarding & Approval (Super Admin scope)
 Onboard and approve the organizer profile.
 
 1. **Add Organizer Profile**:
    * **URL**: `POST /api/v1/organizer`
-   * **Headers**: `Authorization: Bearer <userToken>` (or `<superAdminToken>`)
+   * **Headers**: `Authorization: Bearer <superAdminToken>`
    * **Body**:
      ```json
      {

@@ -32,6 +32,11 @@ class OrganizerController {
     const organizer = await organizerService.suspendOrganizer(req.params.id);
     return successResponse(res, 200, 'Organizer suspended successfully', organizer);
   });
+
+  rejectOrganizer = asyncHandler(async (req, res) => {
+    const result = await organizerService.rejectOrganizer(req.params.id);
+    return successResponse(res, 200, 'Organizer application rejected successfully', result);
+  });
 }
 
 module.exports = new OrganizerController();

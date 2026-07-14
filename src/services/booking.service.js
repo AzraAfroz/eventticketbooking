@@ -29,7 +29,7 @@ class BookingService {
       throw ApiError.badRequest('Some seats are invalid or belong to a different event');
     }
 
-    const unavailableSeats = seats.filter(s => s.status !== SEAT_STATUS.AVAILABLE);
+    const unavailableSeats = seats.filter(s => s.status !== SEAT_STATUS.AVAILABLE && s.status !== SEAT_STATUS.HOLD);
     if (unavailableSeats.length > 0) {
       throw ApiError.badRequest('Some seats are already booked or reserved');
     }
@@ -138,6 +138,51 @@ class BookingService {
     } catch (error) {
       await transaction.rollback();
       throw error;
+    }
+  }
+
+  async expireUnpaidBookings() {
+    const { Op } = require('sequelize');
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+
+    const expiredBookings = await Booking.findAll({
+      where: {
+        status: BOOKING_STATUS.PENDING,
+        createdAt: {
+          [Op.lt]: tenMinutesAgo
+        }
+      },
+      include: [{ model: Seat, as: 'seats' }]
+    });
+
+    if (expiredBookings.length === 0) {
+      return;
+    }
+
+    for (const booking of expiredBookings) {
+      const transaction = await sequelize.transaction();
+      try {
+        booking.status = BOOKING_STATUS.EXPIRED;
+        await booking.save({ transaction });
+
+        const seatIds = booking.seats.map(s => s.id);
+        if (seatIds.length > 0) {
+          await Seat.update(
+            { status: SEAT_STATUS.AVAILABLE },
+            { where: { id: seatIds }, transaction }
+          );
+        }
+
+        await Ticket.update(
+          { status: TICKET_STATUS.CANCELLED },
+          { where: { bookingId: booking.id }, transaction }
+        );
+
+        await transaction.commit();
+      } catch (err) {
+        await transaction.rollback();
+        console.error(`Failed to expire booking ${booking.id}:`, err);
+      }
     }
   }
 }

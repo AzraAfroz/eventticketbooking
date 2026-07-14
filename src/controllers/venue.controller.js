@@ -17,6 +17,16 @@ class VenueController {
     const venue = await venueService.createVenue(req.body);
     return successResponse(res, 201, 'Venue created successfully', venue);
   });
+
+  updateVenue = asyncHandler(async (req, res) => {
+    const venue = await venueService.updateVenue(req.params.id, req.body);
+    return successResponse(res, 200, 'Venue updated successfully', venue);
+  });
+
+  deleteVenue = asyncHandler(async (req, res) => {
+    await venueService.deleteVenue(req.params.id);
+    return successResponse(res, 200, 'Venue deleted successfully');
+  });
 }
 
 module.exports = new VenueController();

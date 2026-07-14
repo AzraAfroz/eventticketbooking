@@ -24,7 +24,30 @@ const login = Joi.object({
   })
 });
 
+const forgotPassword = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Please enter a valid email address',
+    'any.required': 'Email is required'
+  })
+});
+
+const resetPassword = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Please enter a valid email address',
+    'any.required': 'Email is required'
+  }),
+  token: Joi.string().required().messages({
+    'any.required': 'Reset token is required'
+  }),
+  newPassword: Joi.string().min(6).required().messages({
+    'string.min': 'New password must be at least 6 characters long',
+    'any.required': 'New password is required'
+  })
+});
+
 module.exports = {
   register,
-  login
+  login,
+  forgotPassword,
+  resetPassword
 };

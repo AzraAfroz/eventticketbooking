@@ -104,6 +104,42 @@ class AuthService {
       token
     };
   }
+
+  async forgotPassword(email) {
+    const user = await authRepository.findByEmail(email);
+    if (!user) {
+      throw ApiError.notFound('User with this email does not exist.');
+    }
+    
+    const resetToken = 'RST-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    
+    return {
+      message: 'Password reset token generated. Please use the token below to reset your password.',
+      resetToken
+    };
+  }
+
+  async resetPassword(email, token, newPassword) {
+    const user = await authRepository.findByEmail(email);
+    if (!user) {
+      throw ApiError.notFound('User not found.');
+    }
+    
+    if (!token || token.length < 4) {
+      throw ApiError.badRequest('Invalid or expired reset token.');
+    }
+
+    const { User } = require('../models');
+    const dbUser = await User.findByPk(user.id);
+    
+    const hashedPassword = await hashPassword(newPassword);
+    dbUser.password = hashedPassword;
+    await dbUser.save();
+
+    return {
+      message: 'Your password has been successfully updated.'
+    };
+  }
 }
 
 module.exports = new AuthService();

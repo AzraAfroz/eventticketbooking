@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const createOrganizer = Joi.object({
+  userId: Joi.number().integer().required(),
   companyName: Joi.string().required(),
   contactEmail: Joi.string().email().required(),
   contactPhone: Joi.string().optional(),

@@ -2,11 +2,11 @@ const { Permission } = require('../models');
 
 class PermissionRepository {
   async findAll() {
-    return [];
+    return await Permission.findAll();
   }
 
   async findById(id) {
-    return null;
+    return await Permission.findByPk(id);
   }
 }
 

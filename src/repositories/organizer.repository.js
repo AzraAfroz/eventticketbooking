@@ -14,6 +14,10 @@ class OrganizerRepository {
     });
   }
 
+  async findByUserId(userId) {
+    return await Organizer.findOne({ where: { userId } });
+  }
+
   async findOrganizerRole() {
     return await Role.findOne({ where: { name: ROLES.ORGANIZER } });
   }

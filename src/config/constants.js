@@ -22,6 +22,8 @@ module.exports = {
   SEAT_STATUS: {
     AVAILABLE: 'available',
     HOLD: 'hold',
-    BOOKED: 'booked'
+    RESERVED: 'reserved',
+    BOOKED: 'booked',
+    BLOCKED: 'blocked'
   }
 };

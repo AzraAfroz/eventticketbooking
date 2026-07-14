@@ -1,16 +1,28 @@
-const { Role } = require('../models');
+const { Role, Permission } = require('../models');
 
 class RoleRepository {
   async findAll() {
-    return [];
+    return await Role.findAll({
+      include: [{
+        model: Permission,
+        as: 'permissions',
+        through: { attributes: [] }
+      }]
+    });
   }
 
   async findById(id) {
-    return null;
+    return await Role.findByPk(id, {
+      include: [{
+        model: Permission,
+        as: 'permissions',
+        through: { attributes: [] }
+      }]
+    });
   }
 
   async create(roleData) {
-    return null;
+    return await Role.create(roleData);
   }
 }
 

@@ -2,7 +2,7 @@ const permissionRepository = require('../repositories/permission.repository');
 
 class PermissionService {
   async getAllPermissions() {
-    return [];
+    return await permissionRepository.findAll();
   }
 }
 

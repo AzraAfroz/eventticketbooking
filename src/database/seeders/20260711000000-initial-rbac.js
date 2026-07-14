@@ -7,7 +7,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const now = new Date();
 
-    // 1. Seed Roles
+  
     const rolesData = Object.values(ROLES).map(role => ({
       name: role,
       description: `Role for ${role.replace('_', ' ')}`,
@@ -32,14 +32,14 @@ module.exports = {
     }));
     await queryInterface.bulkInsert('permissions', permissionsData);
 
-    // Fetch inserted permissions to map name to ID
+ 
     const [permissions] = await queryInterface.sequelize.query('SELECT id, name from permissions;');
     const permissionMap = {};
     permissions.forEach(row => {
       permissionMap[row.name] = row.id;
     });
 
-    // 3. Seed Role-Permissions junction mappings
+    
     const rolePermissionsData = [];
     Object.keys(ROLE_PERMISSIONS_MAPPING).forEach(roleName => {
       const roleId = roleMap[roleName];

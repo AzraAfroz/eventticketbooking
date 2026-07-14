@@ -13,6 +13,17 @@ class AuthController {
     const result = await authService.login(email, password);
     return successResponse(res, 200, 'User logged in successfully', result);
   });
+
+  forgotPassword = asyncHandler(async (req, res) => {
+    const result = await authService.forgotPassword(req.body.email);
+    return successResponse(res, 200, 'Password reset token generated successfully', result);
+  });
+
+  resetPassword = asyncHandler(async (req, res) => {
+    const { email, token, newPassword } = req.body;
+    const result = await authService.resetPassword(email, token, newPassword);
+    return successResponse(res, 200, 'Password reset successfully', result);
+  });
 }
 
 module.exports = new AuthController();

@@ -15,6 +15,21 @@ class OrganizerService {
   }
 
   async createOrganizer(organizerData) {
+    const { userId } = organizerData;
+    const { User } = require('../models');
+    
+    // Check if user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw ApiError.notFound('User not found');
+    }
+
+    // Check if organizer profile already exists for this user
+    const existingOrganizer = await organizerRepository.findByUserId(userId);
+    if (existingOrganizer) {
+      throw ApiError.conflict('Organizer profile already exists for this user');
+    }
+
     const organizerRole = await this.getOrganizerRole();
     const organizer = await organizerRepository.create(organizerData);
 
@@ -50,6 +65,30 @@ class OrganizerService {
     }
     await organizerRepository.updateUserStatus(organizer.userId, false);
     return await organizerRepository.findById(id);
+  }
+
+  async rejectOrganizer(id) {
+    const organizer = await organizerRepository.findById(id);
+    if (!organizer) {
+      throw ApiError.notFound('Organizer not found');
+    }
+    const { Role, Organizer } = require('../models');
+    const { ROLES } = require('../config/constants');
+    const customerRole = await Role.findOne({ where: { name: ROLES.CUSTOMER } });
+    
+    if (customerRole) {
+      await organizerRepository.updateUserRole(organizer.userId, customerRole.id);
+    }
+    await organizerRepository.updateUserStatus(organizer.userId, false);
+    
+    const orgRecord = await Organizer.findByPk(id);
+    if (orgRecord) {
+      await orgRecord.destroy();
+    }
+    
+    return {
+      message: 'Organizer application has been rejected and the profile was removed.'
+    };
   }
 
   async getOrganizerRole() {

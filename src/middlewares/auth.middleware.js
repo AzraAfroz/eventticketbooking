@@ -7,18 +7,13 @@ const asyncHandler = require('./asyncHandler');
  * Verifies JWT token and attaches user information to req.user
  */
 const authenticate = asyncHandler(async (req, res, next) => {
-  let token;
+  const authHeader = req.headers.authorization;
 
-  if (req.headers.authorization) {
-    const match = req.headers.authorization.match(/^bearer\s+(.+)$/i);
-    if (match) {
-      token = match[1];
-    }
-  }
-
-  if (!token) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return next(ApiError.unauthorized('Access denied. No token provided.'));
   }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = verifyToken(token);

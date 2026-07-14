@@ -1,38 +1,16 @@
 {
   "info": {
     "_postman_id": "a97c8cf4-ef9c-4861-b4a1-db9b01511234",
-    "name": "Event Ticket Booking API",
-    "description": "API collection for Event Ticket Booking Server",
+    "name": "Event Ticket Booking API - Complete Flow",
+    "description": "Complete API testing collection for Event Ticket Booking Server matching the PDF flow.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "System",
+      "name": "1. Authentication",
       "item": [
         {
-          "name": "Health Check",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "health"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Auth",
-      "item": [
-        {
-          "name": "Register User",
+          "name": "Register Customer",
           "request": {
             "method": "POST",
             "header": [
@@ -105,31 +83,441 @@
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Events",
-      "item": [
+        },
         {
-          "name": "Get All Events",
+          "name": "Forgot Password",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\"\n}"
+            },
             "url": {
-              "raw": "{{baseUrl}}/api/v1/events",
+              "raw": "{{baseUrl}}/api/v1/auth/forgot-password",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "v1",
-                "events"
+                "auth",
+                "forgot-password"
               ]
             }
           },
           "response": []
         },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"token\": \"RST-XXXXXX\",\n  \"newPassword\": \"newsecurepwd123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Organizer Onboarding",
+      "item": [
+        {
+          "name": "Add Organizer Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 5,\n  \"companyName\": \"Tech Events Inc.\",\n  \"contactEmail\": \"contact@techevents.com\",\n  \"contactPhone\": \"+1234567890\",\n  \"website\": \"https://techevents.com\",\n  \"address\": \"123 Innovation Way\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Organizer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers/2/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers",
+                "2",
+                "approve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Organizer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers/2/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers",
+                "2",
+                "reject"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Organizer List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Organizer Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Suspend Organizer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/organizers/2/suspend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "organizers",
+                "2",
+                "suspend"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Venue Setup",
+      "item": [
+        {
+          "name": "Create Venue",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grand Arena\",\n  \"address\": \"123 Stadium Way\",\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"country\": \"USA\",\n  \"zipCode\": \"90001\",\n  \"capacity\": 500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/venues",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "venues"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Venues",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/venues",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "venues"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Venue Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/venues/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "venues",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Venue",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grand Arena - Renamed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/venues/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "venues",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Venue",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/venues/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "venues",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Event Creation",
+      "item": [
         {
           "name": "Create Event",
           "request": {
@@ -153,7 +541,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Rock Concert 2026\",\n  \"description\": \"Live rock music event\",\n  \"date\": \"2026-10-15T20:00:00Z\",\n  \"venueId\": 1\n}"
+              "raw": "{\n  \"title\": \"Rock Concert 2026\",\n  \"description\": \"Live rock music event\",\n  \"date\": \"2026-10-15T20:00:00Z\",\n  \"venueId\": 1,\n  \"categories\": [\n    {\n      \"name\": \"VIP\",\n      \"price\": 150.00,\n      \"capacity\": 5\n    },\n    {\n      \"name\": \"GA\",\n      \"price\": 50.00,\n      \"capacity\": 10\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/events",
@@ -168,12 +556,291 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Browse Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Event Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/events/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Event",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Rock Concert 2026 - Updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/events/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Event",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/events/1/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "1",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
     {
-      "name": "Bookings",
+      "name": "5. Seat Setup",
       "item": [
+        {
+          "name": "Bulk Generate Seats",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"seatCategoryId\": 1,\n  \"rows\": 5,\n  \"columns\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/seats/bulk-generate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seats",
+                "bulk-generate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Seats for Event",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/seats/event/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seats",
+                "event",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Disable Seat",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/seats/22/disable",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seats",
+                "22",
+                "disable"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Enable Seat",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/seats/22/enable",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seats",
+                "22",
+                "enable"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6. Booking",
+      "item": [
+        {
+          "name": "Reserve Seat (Hold)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/seats/21/reserve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seats",
+                "21",
+                "reserve"
+              ]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Create Booking",
           "request": {
@@ -197,7 +864,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"eventId\": 1,\n  \"seats\": [12, 13]\n}"
+              "raw": "{\n  \"eventId\": 1,\n  \"seats\": [21]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/bookings",
@@ -208,6 +875,388 @@
                 "api",
                 "v1",
                 "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Booking Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bookings",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/1/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bookings",
+                "1",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7. Ticket",
+      "item": [
+        {
+          "name": "Get Ticket Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tickets/TKT-1234567890",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tickets",
+                "TKT-1234567890"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Ticket PDF",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tickets/TKT-1234567890/download",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tickets",
+                "TKT-1234567890",
+                "download"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Ticket Email",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tickets/TKT-1234567890/resend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tickets",
+                "TKT-1234567890",
+                "resend"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Ticket at Entry",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticketNumber\": \"TKT-1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tickets/validate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tickets",
+                "validate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8. Dashboard & Reports",
+      "item": [
+        {
+          "name": "View Platform Statistics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sales Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/sales",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Revenue Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/revenue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "revenue"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Organizer Performance Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/organizer-performance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "organizer-performance"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Customer Activity Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/customer-activity",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "customer-activity"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Booking Analytics Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/booking-analytics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "booking-analytics"
               ]
             }
           },

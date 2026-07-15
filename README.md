@@ -64,10 +64,18 @@ event-ticket-booking-server
    ```
 
 2. **Setup environment variables**:
-   Create a `.env` file from the placeholder configurations.
-
-3. **Database migrations & seeders**:
+   Create a `.env` file from the `.env.example` template:
    ```bash
+   cp .env.example .env
+   ```
+   Open the newly created `.env` file and update the `DB_USER` and `DB_PASSWORD` values with your local PostgreSQL credentials.
+
+3. **Database setup, migrations & seeders**:
+   Ensure PostgreSQL is running on your machine, then run:
+   ```bash
+   # Create the database
+   npm run db:create
+
    # Run migrations
    npm run db:migrate
 

@@ -13,7 +13,7 @@ const startServer = async () => {
     logger.info('Database connection has been established successfully.');
 
    
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       logger.info(`Server is running in [${process.env.NODE_ENV}] mode on port ${PORT}`);
       
       // Expire unpaid bookings every 60 seconds
@@ -24,6 +24,11 @@ const startServer = async () => {
           logger.error('Error expiring unpaid bookings: %o', err);
         }
       }, 60000);
+    });
+
+    server.on('error', (error) => {
+      logger.error('Server error: %o', error);
+      process.exit(1);
     });
   } catch (error) {
     logger.error('Unable to start server: %o', error);

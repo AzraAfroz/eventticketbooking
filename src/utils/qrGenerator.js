@@ -7,7 +7,7 @@ const generateQRCode = async (data) => {
     const stringifiedData = typeof data === 'string' ? data : JSON.stringify(data);
     return await QRCode.toDataURL(stringifiedData);
   } catch (error) {
-    logger.error('QR Code generation error: %o', error);
+    logger.error('QR Code generation error:', error);
     throw error;
   }
 };

@@ -21,17 +21,17 @@ const startServer = async () => {
         try {
           await bookingService.expireUnpaidBookings();
         } catch (err) {
-          logger.error('Error expiring unpaid bookings: %o', err);
+          logger.error('Error expiring unpaid bookings:', err);
         }
       }, 60000);
     });
 
     server.on('error', (error) => {
-      logger.error('Server error: %o', error);
+      logger.error('Server error:', error);
       process.exit(1);
     });
   } catch (error) {
-    logger.error('Unable to start server: %o', error);
+    logger.error('Unable to start server:', error);
     process.exit(1);
   }
 };
